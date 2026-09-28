@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Solicitações - AdotaPet</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #2f80ed;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .titulo {
+            margin-bottom: 25px;
+        }
+
+        .titulo h2 {
+            color: #2f80ed;
+            margin-bottom: 8px;
+        }
+
+        .titulo p {
+            color: #666;
+        }
+
+        .mensagem {
+            display: none;
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 7px;
+        }
+
+        .sucesso {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .erro {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .lista {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .solicitacao {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+        }
+
+        .solicitacao h3 {
+            color: #2f80ed;
+            margin-bottom: 15px;
+        }
+
+        .informacao {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .mensagem-adotante {
+            background-color: #f5f7fa;
+            padding: 12px;
+            border-radius: 7px;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+
+        .data {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .controle-status {
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .controle-status label {
+            font-weight: bold;
+        }
+
+        select {
+            padding: 9px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 9px 15px;
+            border: none;
+            border-radius: 6px;
+            background-color: #2f80ed;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #216dcc;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .pendente {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .analise {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .aprovada {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .recusada {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .vazio {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            color: #666;
+        }
+
+        footer {
+            margin-top: 60px;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media (max-width: 800px) {
+            .lista {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>AdotaPet</h1>
+
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="animais-admin.html">Animais</a>
+            <a href="index.html">Site público</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <div class="titulo">
+            <h2>Solicitações de Adoção</h2>
+
+            <p>
+                Consulte os interessados e atualize o andamento das solicitações.
+            </p>
+        </div>
+
+        <div id="mensagem" class="mensagem"></div>
+
+        <section
+            id="listaSolicitacoes"
+            class="lista"
+        >
+            Carregando solicitações...
+        </section>
+
+    </main>
+
+    <footer>
+        <p>AdotaPet - Plataforma de Adoção Responsável</p>
+    </footer>
+
+    <script>
+
+        const administrador =
+            localStorage.getItem("administrador");
+
+        if (!administrador) {
+            window.location.href = "admin.html";
+        }
+
+        const listaSolicitacoes =
+            document.getElementById(
+                "listaSolicitacoes"
+            );
+
+        const mensagem =
+            document.getElementById("mensagem");
+
+        let solicitacoes = [];
+
+        async function carregarSolicitacoes() {
+
+            try {
+
+                const resposta =
+                    await fetch("/api/solicitacoes");
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        "Não foi possível carregar as solicitações."
+                    );
+                }
+
+                solicitacoes =
+                    await resposta.json();
+
+                mostrarSolicitacoes();
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                listaSolicitacoes.innerHTML = `
+                    <div class="vazio">
+                        <p>
+                            Erro ao carregar solicitações.
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        function mostrarSolicitacoes() {
+
+            if (solicitacoes.length === 0) {
+
+                listaSolicitacoes.innerHTML = `
+                    <div class="vazio">
+                        <p>
+                            Nenhuma solicitação de adoção registrada.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            listaSolicitacoes.innerHTML =
+                solicitacoes.map(solicitacao => {
+
+                    const classeStatus =
+                        obterClasseStatus(
+                            solicitacao.status
+                        );
+
+                    const data =
+                        formatarData(
+                            solicitacao.data_solicitacao
+                        );
+
+                    return `
+                        <div class="solicitacao">
+
+                            <h3>
+                                Interesse em ${solicitacao.animal_nome}
+                            </h3>
+
+                            <span
+                                class="status ${classeStatus}"
+                            >
+                                ${solicitacao.status}
+                            </span>
+
+                            <div class="informacao">
+                                <strong>Interessado:</strong>
+                                ${solicitacao.adotante_nome}
+                            </div>
+
+                            <div class="informacao">
+                                <strong>E-mail:</strong>
+                                ${solicitacao.adotante_email}
+                            </div>
+
+                            <div class="informacao">
+                                <strong>Telefone:</strong>
+                                ${solicitacao.adotante_telefone}
+                            </div>
+
+                            <div class="informacao">
+                                <strong>Cidade:</strong>
+                                ${solicitacao.adotante_cidade}
+                            </div>
+
+                            <div class="data">
+                                Solicitação realizada em:
+                                ${data}
+                            </div>
+
+                            <div class="mensagem-adotante">
+                                <strong>Mensagem:</strong><br>
+                                ${solicitacao.mensagem || "Nenhuma mensagem informada."}
+                            </div>
+
+                            <div class="controle-status">
+
+                                <label>
+                                    Status:
+                                </label>
+
+                                <select
+                                    id="status-${solicitacao.id_solicitacao}"
+                                >
+                                    <option
+                                        value="Pendente"
+                                        ${solicitacao.status === "Pendente" ? "selected" : ""}
+                                    >
+                                        Pendente
+                                    </option>
+
+                                    <option
+                                        value="Em análise"
+                                        ${solicitacao.status === "Em análise" ? "selected" : ""}
+                                    >
+                                        Em análise
+                                    </option>
+
+                                    <option
+                                        value="Aprovada"
+                                        ${solicitacao.status === "Aprovada" ? "selected" : ""}
+                                    >
+                                        Aprovada
+                                    </option>
+
+                                    <option
+                                        value="Recusada"
+                                        ${solicitacao.status === "Recusada" ? "selected" : ""}
+                                    >
+                                        Recusada
+                                    </option>
+                                </select>
+
+                                <button
+                                    onclick="atualizarStatus(${solicitacao.id_solicitacao})"
+                                >
+                                    Atualizar
+                                </button>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                }).join("");
+        }
+
+        async function atualizarStatus(id) {
+
+            const select =
+                document.getElementById(
+                    `status-${id}`
+                );
+
+            const status =
+                select.value;
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `/api/solicitacoes/${id}/status`,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                status
+                            })
+                        }
+                    );
+
+                const resultado =
+                    await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        resultado.erro ||
+                        "Não foi possível atualizar o status."
+                    );
+                }
+
+                mostrarMensagem(
+                    "Status atualizado com sucesso!",
+                    "sucesso"
+                );
+
+                carregarSolicitacoes();
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                mostrarMensagem(
+                    erro.message,
+                    "erro"
+                );
+            }
+        }
+
+        function obterClasseStatus(status) {
+
+            if (status === "Pendente") {
+                return "pendente";
+            }
+
+            if (status === "Em análise") {
+                return "analise";
+            }
+
+            if (status === "Aprovada") {
+                return "aprovada";
+            }
+
+            if (status === "Recusada") {
+                return "recusada";
+            }
+
+            return "";
+        }
+
+        function formatarData(data) {
+
+            if (!data) {
+                return "Data não informada";
+            }
+
+            const dataFormatada =
+                new Date(
+                    data.replace(" ", "T")
+                );
+
+            if (Number.isNaN(
+                dataFormatada.getTime()
+            )) {
+                return data;
+            }
+
+            return dataFormatada.toLocaleString(
+                "pt-BR"
+            );
+        }
+
+        function mostrarMensagem(
+            texto,
+            tipo
+        ) {
+
+            mensagem.textContent =
+                texto;
+
+            mensagem.className =
+                `mensagem ${tipo}`;
+
+            mensagem.style.display =
+                "block";
+
+            setTimeout(() => {
+
+                mensagem.style.display =
+                    "none";
+
+            }, 4000);
+        }
+
+        carregarSolicitacoes();
+
+    </script>
+
+</body>
+</html>

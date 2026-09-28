@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tenho Interesse - AdotaPet</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #2f80ed;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #2f80ed;
+            margin-bottom: 10px;
+        }
+
+        .animal-info {
+            background-color: #f0f6ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .animal-info p {
+            margin: 5px 0;
+        }
+
+        form {
+            margin-top: 25px;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2f80ed;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #2f80ed;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #216dcc;
+        }
+
+        .mensagem {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 7px;
+            display: none;
+        }
+
+        .sucesso {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .erro {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        footer {
+            margin-top: 50px;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            .container {
+                margin: 30px auto;
+            }
+
+            .card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>AdotaPet</h1>
+
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="index.html#animais">Animais</a>
+            <a href="index.html#sobre">Sobre</a>
+            <a href="admin.html">Área administrativa</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="card">
+
+            <h2>Tenho interesse em adotar</h2>
+
+            <p>
+                Preencha o formulário abaixo para demonstrar seu interesse
+                na adoção deste animal.
+            </p>
+
+            <div class="animal-info" id="animalInfo">
+                <p>Carregando informações do animal...</p>
+            </div>
+
+            <form id="formInteresse">
+
+                <div class="campo">
+                    <label for="nome">Nome completo</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        required
+                        placeholder="Digite seu nome completo"
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="email">E-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        placeholder="Digite seu e-mail"
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="telefone">Telefone</label>
+                    <input
+                        type="tel"
+                        id="telefone"
+                        name="telefone"
+                        required
+                        placeholder="Digite seu telefone"
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="cidade">Cidade</label>
+                    <input
+                        type="text"
+                        id="cidade"
+                        name="cidade"
+                        required
+                        placeholder="Digite sua cidade"
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="mensagem">Mensagem</label>
+                    <textarea
+                        id="mensagem"
+                        name="mensagem"
+                        placeholder="Conte um pouco sobre seu interesse na adoção..."
+                    ></textarea>
+                </div>
+
+                <button type="submit">
+                    Enviar interesse de adoção
+                </button>
+
+            </form>
+
+            <div id="mensagemResultado" class="mensagem"></div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>AdotaPet - Plataforma de Adoção Responsável</p>
+    </footer>
+
+    <script>
+        const parametros = new URLSearchParams(window.location.search);
+        const animalId = parametros.get("animal");
+
+        const animalInfo = document.getElementById("animalInfo");
+        const form = document.getElementById("formInteresse");
+        const mensagemResultado = document.getElementById("mensagemResultado");
+
+        let animal = null;
+
+        async function carregarAnimal() {
+
+            if (!animalId) {
+                animalInfo.innerHTML = `
+                    <p>Animal não informado.</p>
+                `;
+                form.style.display = "none";
+                return;
+            }
+
+            try {
+
+                const resposta = await fetch(`/api/animais/${animalId}`);
+
+                if (!resposta.ok) {
+                    throw new Error("Animal não encontrado.");
+                }
+
+                animal = await resposta.json();
+
+                animalInfo.innerHTML = `
+                    <p><strong>Animal:</strong> ${animal.nome}</p>
+                    <p><strong>Espécie:</strong> ${animal.especie}</p>
+                    <p><strong>Sexo:</strong> ${animal.sexo}</p>
+                    <p><strong>Idade:</strong> ${animal.idade} anos</p>
+                    <p><strong>Porte:</strong> ${animal.porte}</p>
+                    <p><strong>Status:</strong> ${animal.status}</p>
+                `;
+
+                if (animal.status !== "Disponível") {
+                    animalInfo.innerHTML += `
+                        <p style="margin-top: 10px; color: #c0392b;">
+                            Este animal não está disponível para adoção no momento.
+                        </p>
+                    `;
+
+                    form.style.display = "none";
+                }
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                animalInfo.innerHTML = `
+                    <p>Não foi possível carregar os dados do animal.</p>
+                `;
+
+                form.style.display = "none";
+            }
+        }
+
+        form.addEventListener("submit", async function(evento) {
+
+            evento.preventDefault();
+
+            if (!animalId) {
+                mostrarMensagem(
+                    "Não foi possível identificar o animal.",
+                    "erro"
+                );
+                return;
+            }
+
+            const dados = {
+                id_animal: Number(animalId),
+                nome: document.getElementById("nome").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                telefone: document.getElementById("telefone").value.trim(),
+                cidade: document.getElementById("cidade").value.trim(),
+                mensagem: document.getElementById("mensagem").value.trim()
+            };
+
+            try {
+
+                const resposta = await fetch("/api/solicitacoes", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        resultado.erro || "Não foi possível enviar a solicitação."
+                    );
+                }
+
+                mostrarMensagem(
+                    "Seu interesse foi registrado com sucesso! Em breve entraremos em contato.",
+                    "sucesso"
+                );
+
+                form.reset();
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                mostrarMensagem(
+                    erro.message || "Ocorreu um erro ao enviar sua solicitação.",
+                    "erro"
+                );
+            }
+        });
+
+        function mostrarMensagem(texto, tipo) {
+
+            mensagemResultado.textContent = texto;
+
+            mensagemResultado.className = `mensagem ${tipo}`;
+
+            mensagemResultado.style.display = "block";
+        }
+
+        carregarAnimal();
+    </script>
+
+</body>
+</html>

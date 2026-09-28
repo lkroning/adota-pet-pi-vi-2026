@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - AdotaPet</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #2f80ed;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .admin-info span {
+            font-weight: bold;
+        }
+
+        .btn-sair {
+            padding: 9px 15px;
+            background-color: white;
+            color: #2f80ed;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-sair:hover {
+            background-color: #e9f1ff;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .titulo {
+            margin-bottom: 30px;
+        }
+
+        .titulo h2 {
+            color: #2f80ed;
+            margin-bottom: 8px;
+        }
+
+        .titulo p {
+            color: #666;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .numero {
+            font-size: 34px;
+            font-weight: bold;
+            color: #2f80ed;
+        }
+
+        .acoes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .acao {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+        }
+
+        .acao h3 {
+            color: #2f80ed;
+            margin-bottom: 10px;
+        }
+
+        .acao p {
+            color: #666;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .botao {
+            display: inline-block;
+            padding: 11px 18px;
+            background-color: #2f80ed;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .botao:hover {
+            background-color: #216dcc;
+        }
+
+        footer {
+            margin-top: 60px;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media (max-width: 800px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .acoes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>AdotaPet</h1>
+
+        <div class="admin-info">
+            <span id="nomeAdmin">Administrador</span>
+
+            <button
+                class="btn-sair"
+                onclick="sair()"
+            >
+                Sair
+            </button>
+        </div>
+
+    </header>
+
+    <main>
+
+        <div class="titulo">
+            <h2>Dashboard Administrativo</h2>
+
+            <p>
+                Gerencie os animais e as solicitações de adoção da plataforma.
+            </p>
+        </div>
+
+        <section class="cards">
+
+            <div class="card">
+                <h3>Animais cadastrados</h3>
+
+                <div
+                    class="numero"
+                    id="totalAnimais"
+                >
+                    -
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Animais disponíveis</h3>
+
+                <div
+                    class="numero"
+                    id="animaisDisponiveis"
+                >
+                    -
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Solicitações</h3>
+
+                <div
+                    class="numero"
+                    id="totalSolicitacoes"
+                >
+                    -
+                </div>
+            </div>
+
+        </section>
+
+        <section class="acoes">
+
+            <div class="acao">
+
+                <h3>Gerenciar animais</h3>
+
+                <p>
+                    Cadastre novos animais, altere informações,
+                    atualize o status ou remova animais.
+                </p>
+
+                <a
+                    href="animais-admin.html"
+                    class="botao"
+                >
+                    Gerenciar animais
+                </a>
+
+            </div>
+
+            <div class="acao">
+
+                <h3>Solicitações de adoção</h3>
+
+                <p>
+                    Consulte as solicitações realizadas pelos
+                    interessados e atualize seus status.
+                </p>
+
+                <a
+                    href="solicitacoes-admin.html"
+                    class="botao"
+                >
+                    Ver solicitações
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>AdotaPet - Plataforma de Adoção Responsável</p>
+    </footer>
+
+    <script>
+
+        const administrador = localStorage.getItem("administrador");
+
+        if (!administrador) {
+            window.location.href = "admin.html";
+        }
+
+        const dadosAdmin = JSON.parse(administrador);
+
+        document.getElementById("nomeAdmin").textContent =
+            dadosAdmin.nome;
+
+        async function carregarEstatisticas() {
+
+            try {
+
+                const resposta = await fetch("/api/animais");
+
+                const animais = await resposta.json();
+
+                document.getElementById("totalAnimais").textContent =
+                    animais.length;
+
+                const disponiveis = animais.filter(
+                    animal => animal.status === "Disponível"
+                );
+
+                document.getElementById("animaisDisponiveis").textContent =
+                    disponiveis.length;
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao carregar estatísticas:",
+                    erro
+                );
+
+            }
+
+        }
+
+        async function carregarSolicitacoes() {
+
+            try {
+
+                const resposta = await fetch(
+                    "/api/solicitacoes"
+                );
+
+                if (!resposta.ok) {
+                    return;
+                }
+
+                const solicitacoes = await resposta.json();
+
+                document.getElementById(
+                    "totalSolicitacoes"
+                ).textContent = solicitacoes.length;
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao carregar solicitações:",
+                    erro
+                );
+
+            }
+
+        }
+
+        function sair() {
+
+            localStorage.removeItem("administrador");
+
+            window.location.href = "admin.html";
+        }
+
+        carregarEstatisticas();
+        carregarSolicitacoes();
+
+    </script>
+
+</body>
+</html>

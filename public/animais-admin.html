@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gerenciar Animais - AdotaPet</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #2f80ed;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .titulo {
+            margin-bottom: 25px;
+        }
+
+        .titulo h2 {
+            color: #2f80ed;
+            margin-bottom: 8px;
+        }
+
+        .titulo p {
+            color: #666;
+        }
+
+        .formulario {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+            margin-bottom: 35px;
+        }
+
+        .formulario h3 {
+            color: #2f80ed;
+            margin-bottom: 20px;
+        }
+
+        .campos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .campo-completo {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2f80ed;
+        }
+
+        .botoes-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-principal {
+            background-color: #2f80ed;
+            color: white;
+        }
+
+        .btn-principal:hover {
+            background-color: #216dcc;
+        }
+
+        .btn-cancelar {
+            background-color: #777;
+            color: white;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #555;
+        }
+
+        .lista {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .animal-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+        }
+
+        .animal-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        .animal-sem-imagem {
+            width: 100%;
+            height: 180px;
+            background-color: #e9eef5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+
+        .animal-info {
+            padding: 20px;
+        }
+
+        .animal-info h3 {
+            color: #2f80ed;
+            margin-bottom: 10px;
+        }
+
+        .animal-info p {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 9px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .disponivel {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .adotado {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .indisponivel {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .botoes-card {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .btn-editar {
+            background-color: #f0ad4e;
+            color: white;
+        }
+
+        .btn-excluir {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .mensagem {
+            display: none;
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 7px;
+        }
+
+        .sucesso {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .erro {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        footer {
+            margin-top: 60px;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .lista {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .campos,
+            .lista {
+                grid-template-columns: 1fr;
+            }
+
+            .formulario {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>AdotaPet</h1>
+
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="index.html">Site público</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <div class="titulo">
+            <h2>Gerenciar Animais</h2>
+
+            <p>
+                Cadastre, edite, altere o status ou exclua animais.
+            </p>
+        </div>
+
+        <div id="mensagem" class="mensagem"></div>
+
+        <section class="formulario">
+
+            <h3 id="tituloFormulario">
+                Cadastrar novo animal
+            </h3>
+
+            <form id="formAnimal">
+
+                <div class="campos">
+
+                    <div class="campo">
+                        <label for="nome">Nome *</label>
+
+                        <input
+                            type="text"
+                            id="nome"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="especie">Espécie *</label>
+
+                        <select id="especie" required>
+                            <option value="">Selecione</option>
+                            <option value="Cachorro">Cachorro</option>
+                            <option value="Gato">Gato</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="sexo">Sexo *</label>
+
+                        <select id="sexo" required>
+                            <option value="">Selecione</option>
+                            <option value="Macho">Macho</option>
+                            <option value="Fêmea">Fêmea</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="idade">Idade *</label>
+
+                        <input
+                            type="number"
+                            id="idade"
+                            min="0"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="porte">Porte *</label>
+
+                        <select id="porte" required>
+                            <option value="">Selecione</option>
+                            <option value="Pequeno">Pequeno</option>
+                            <option value="Médio">Médio</option>
+                            <option value="Grande">Grande</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="status">Status *</label>
+
+                        <select id="status" required>
+                            <option value="Disponível">
+                                Disponível
+                            </option>
+
+                            <option value="Adotado">
+                                Adotado
+                            </option>
+
+                            <option value="Indisponível">
+                                Indisponível
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="campo campo-completo">
+                        <label for="foto">URL da foto</label>
+
+                        <input
+                            type="url"
+                            id="foto"
+                            placeholder="https://exemplo.com/foto.jpg"
+                        >
+                    </div>
+
+                    <div class="campo campo-completo">
+                        <label for="descricao">Descrição</label>
+
+                        <textarea
+                            id="descricao"
+                            placeholder="Descreva o animal..."
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <div class="botoes-form">
+
+                    <button
+                        type="submit"
+                        class="btn-principal"
+                        id="btnSalvar"
+                    >
+                        Cadastrar animal
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn-cancelar"
+                        id="btnCancelar"
+                        style="display: none;"
+                        onclick="cancelarEdicao()"
+                    >
+                        Cancelar edição
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <section>
+
+            <h3 style="margin-bottom: 20px;">
+                Animais cadastrados
+            </h3>
+
+            <div
+                id="listaAnimais"
+                class="lista"
+            >
+                Carregando animais...
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>AdotaPet - Plataforma de Adoção Responsável</p>
+    </footer>
+
+    <script>
+
+        const administrador = localStorage.getItem("administrador");
+
+        if (!administrador) {
+            window.location.href = "admin.html";
+        }
+
+        let animais = [];
+        let animalEditando = null;
+
+        const formAnimal =
+            document.getElementById("formAnimal");
+
+        const listaAnimais =
+            document.getElementById("listaAnimais");
+
+        const mensagem =
+            document.getElementById("mensagem");
+
+        const tituloFormulario =
+            document.getElementById("tituloFormulario");
+
+        const btnSalvar =
+            document.getElementById("btnSalvar");
+
+        const btnCancelar =
+            document.getElementById("btnCancelar");
+
+        async function carregarAnimais() {
+
+            try {
+
+                const resposta =
+                    await fetch("/api/animais");
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        "Não foi possível carregar os animais."
+                    );
+                }
+
+                animais = await resposta.json();
+
+                mostrarAnimais();
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                listaAnimais.innerHTML =
+                    "<p>Erro ao carregar animais.</p>";
+            }
+        }
+
+        function mostrarAnimais() {
+
+            if (animais.length === 0) {
+
+                listaAnimais.innerHTML =
+                    "<p>Nenhum animal cadastrado.</p>";
+
+                return;
+            }
+
+            listaAnimais.innerHTML =
+                animais.map(animal => {
+
+                    const imagem = animal.foto
+                        ? `
+                            <img
+                                src="${animal.foto}"
+                                alt="Foto de ${animal.nome}"
+                                onerror="this.style.display='none'"
+                            >
+                        `
+                        : `
+                            <div class="animal-sem-imagem">
+                                Sem imagem
+                            </div>
+                        `;
+
+                    let classeStatus = "indisponivel";
+
+                    if (animal.status === "Disponível") {
+                        classeStatus = "disponivel";
+                    }
+
+                    if (animal.status === "Adotado") {
+                        classeStatus = "adotado";
+                    }
+
+                    return `
+                        <div class="animal-card">
+
+                            ${imagem}
+
+                            <div class="animal-info">
+
+                                <h3>${animal.nome}</h3>
+
+                                <p>
+                                    <strong>Espécie:</strong>
+                                    ${animal.especie}
+                                </p>
+
+                                <p>
+                                    <strong>Sexo:</strong>
+                                    ${animal.sexo}
+                                </p>
+
+                                <p>
+                                    <strong>Idade:</strong>
+                                    ${animal.idade} anos
+                                </p>
+
+                                <p>
+                                    <strong>Porte:</strong>
+                                    ${animal.porte}
+                                </p>
+
+                                <span
+                                    class="status ${classeStatus}"
+                                >
+                                    ${animal.status}
+                                </span>
+
+                                <div class="botoes-card">
+
+                                    <button
+                                        class="btn-editar"
+                                        onclick="editarAnimal(${animal.id_animal})"
+                                    >
+                                        Editar
+                                    </button>
+
+                                    <button
+                                        class="btn-excluir"
+                                        onclick="excluirAnimal(${animal.id_animal})"
+                                    >
+                                        Excluir
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                }).join("");
+        }
+
+        formAnimal.addEventListener(
+            "submit",
+            async function(evento) {
+
+                evento.preventDefault();
+
+                const dados = {
+
+                    nome:
+                        document.getElementById("nome").value.trim(),
+
+                    especie:
+                        document.getElementById("especie").value,
+
+                    sexo:
+                        document.getElementById("sexo").value,
+
+                    idade:
+                        Number(
+                            document.getElementById("idade").value
+                        ),
+
+                    porte:
+                        document.getElementById("porte").value,
+
+                    descricao:
+                        document.getElementById("descricao").value.trim(),
+
+                    foto:
+                        document.getElementById("foto").value.trim(),
+
+                    status:
+                        document.getElementById("status").value
+                };
+
+                try {
+
+                    let resposta;
+
+                    if (animalEditando) {
+
+                        resposta = await fetch(
+                            `/api/animais/${animalEditando}`,
+                            {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(dados)
+                            }
+                        );
+
+                    } else {
+
+                        resposta = await fetch(
+                            "/api/animais",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(dados)
+                            }
+                        );
+                    }
+
+                    const resultado =
+                        await resposta.json();
+
+                    if (!resposta.ok) {
+                        throw new Error(
+                            resultado.erro ||
+                            "Não foi possível salvar o animal."
+                        );
+                    }
+
+                    mostrarMensagem(
+                        animalEditando
+                            ? "Animal atualizado com sucesso!"
+                            : "Animal cadastrado com sucesso!",
+                        "sucesso"
+                    );
+
+                    cancelarEdicao();
+
+                    carregarAnimais();
+
+                } catch (erro) {
+
+                    console.error(erro);
+
+                    mostrarMensagem(
+                        erro.message,
+                        "erro"
+                    );
+                }
+            }
+        );
+
+        function editarAnimal(id) {
+
+            const animal =
+                animais.find(
+                    item => item.id_animal === id
+                );
+
+            if (!animal) {
+                return;
+            }
+
+            animalEditando = id;
+
+            document.getElementById("nome").value =
+                animal.nome;
+
+            document.getElementById("especie").value =
+                animal.especie;
+
+            document.getElementById("sexo").value =
+                animal.sexo;
+
+            document.getElementById("idade").value =
+                animal.idade;
+
+            document.getElementById("porte").value =
+                animal.porte;
+
+            document.getElementById("status").value =
+                animal.status;
+
+            document.getElementById("foto").value =
+                animal.foto || "";
+
+            document.getElementById("descricao").value =
+                animal.descricao || "";
+
+            tituloFormulario.textContent =
+                "Editar animal";
+
+            btnSalvar.textContent =
+                "Salvar alterações";
+
+            btnCancelar.style.display =
+                "inline-block";
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        function cancelarEdicao() {
+
+            animalEditando = null;
+
+            formAnimal.reset();
+
+            document.getElementById("status").value =
+                "Disponível";
+
+            tituloFormulario.textContent =
+                "Cadastrar novo animal";
+
+            btnSalvar.textContent =
+                "Cadastrar animal";
+
+            btnCancelar.style.display =
+                "none";
+        }
+
+        async function excluirAnimal(id) {
+
+            const animal =
+                animais.find(
+                    item => item.id_animal === id
+                );
+
+            if (!animal) {
+                return;
+            }
+
+            const confirmar =
+                confirm(
+                    `Tem certeza que deseja excluir ${animal.nome}?`
+                );
+
+            if (!confirmar) {
+                return;
+            }
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `/api/animais/${id}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+                const resultado =
+                    await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        resultado.erro ||
+                        "Não foi possível excluir o animal."
+                    );
+                }
+
+                mostrarMensagem(
+                    "Animal excluído com sucesso!",
+                    "sucesso"
+                );
+
+                carregarAnimais();
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                mostrarMensagem(
+                    erro.message,
+                    "erro"
+                );
+            }
+        }
+
+        function mostrarMensagem(texto, tipo) {
+
+            mensagem.textContent = texto;
+
+            mensagem.className =
+                `mensagem ${tipo}`;
+
+            mensagem.style.display =
+                "block";
+
+            setTimeout(() => {
+
+                mensagem.style.display =
+                    "none";
+
+            }, 4000);
+        }
+
+        carregarAnimais();
+
+    </script>
+
+</body>
+</html>

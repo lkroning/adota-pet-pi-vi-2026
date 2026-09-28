@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Área Administrativa - AdotaPet</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #2f80ed;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background-color: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .login-card h2 {
+            color: #2f80ed;
+            margin-bottom: 10px;
+        }
+
+        .login-card > p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2f80ed;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background-color: #2f80ed;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #216dcc;
+        }
+
+        .mensagem {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 7px;
+        }
+
+        .erro {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .sucesso {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            .login-card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>AdotaPet</h1>
+
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="index.html#animais">Animais</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <div class="login-card">
+
+            <h2>Área Administrativa</h2>
+
+            <p>
+                Entre com suas credenciais para acessar o sistema.
+            </p>
+
+            <form id="formLogin">
+
+                <div class="campo">
+                    <label for="email">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        placeholder="Digite seu e-mail"
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="senha">Senha</label>
+
+                    <input
+                        type="password"
+                        id="senha"
+                        required
+                        placeholder="Digite sua senha"
+                    >
+                </div>
+
+                <button type="submit">
+                    Entrar
+                </button>
+
+            </form>
+
+            <div id="mensagem" class="mensagem"></div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>AdotaPet - Plataforma de Adoção Responsável</p>
+    </footer>
+
+    <script>
+        const formLogin = document.getElementById("formLogin");
+        const mensagem = document.getElementById("mensagem");
+
+        formLogin.addEventListener("submit", async function(evento) {
+
+            evento.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
+
+            try {
+
+                const resposta = await fetch("/api/admin/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email,
+                        senha
+                    })
+                });
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        resultado.erro || "Não foi possível realizar o login."
+                    );
+                }
+
+                localStorage.setItem(
+                    "administrador",
+                    JSON.stringify(resultado.administrador)
+                );
+
+                mensagem.textContent = "Login realizado com sucesso!";
+                mensagem.className = "mensagem sucesso";
+
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 800);
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                mensagem.textContent = erro.message;
+                mensagem.className = "mensagem erro";
+            }
+        });
+    </script>
+
+</body>
+</html>

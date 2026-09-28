@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>AdotaPet</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7f2;
+            color: #333;
+        }
+
+        /* =========================
+           CABEÇALHO
+        ========================= */
+
+        header {
+            background-color: #2f6f4e;
+            color: white;
+            padding: 20px 8%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            padding: 70px 8%;
+            background-color: #dfeee4;
+        }
+
+        .hero h2 {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           CONTEÚDO
+        ========================= */
+
+        .container {
+            width: 84%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .container h2 {
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           FILTROS
+        ========================= */
+
+        .filtros {
+            display: grid;
+
+            grid-template-columns:
+                2fr 1fr 1fr 1fr auto;
+
+            gap: 12px;
+
+            margin-bottom: 30px;
+        }
+
+        .filtros input,
+        .filtros select,
+        .filtros button {
+            padding: 12px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+        }
+
+        .filtros button {
+            background-color: #2f6f4e;
+
+            color: white;
+
+            border: none;
+
+            cursor: pointer;
+        }
+
+        .filtros button:hover {
+            opacity: 0.9;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        #animais {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(240px, 1fr)
+                );
+
+            gap: 25px;
+        }
+
+        .card {
+            background-color: white;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 3px 10px
+                rgba(0, 0, 0, 0.08);
+        }
+
+        .foto {
+            height: 180px;
+
+            background-color: #d8e4dc;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 60px;
+
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 22px;
+
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            margin-bottom: 6px;
+
+            line-height: 1.4;
+        }
+
+        .status {
+            color: #2f6f4e;
+
+            font-weight: bold;
+
+            margin-top: 12px;
+        }
+
+        /* =========================
+           BOTÃO DETALHES
+        ========================= */
+
+        .btn-detalhes {
+            width: 100%;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background-color: #2f6f4e;
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+        }
+
+        .btn-detalhes:hover {
+            opacity: 0.9;
+        }
+
+        /* =========================
+           RODAPÉ
+        ========================= */
+
+        footer {
+            margin-top: 60px;
+            padding: 40px 8% 20px;
+            background-color: #26382d;
+            color: white;
+        }
+
+        .footer-conteudo {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 35px;
+            text-align: left;
+        }
+
+        .footer-coluna h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .footer-coluna p {
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .footer-coluna ul {
+            list-style: none;
+        }
+
+        .footer-coluna li {
+            margin-bottom: 8px;
+        }
+
+        .footer-coluna a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-coluna a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-direitos {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .footer-direitos p {
+            margin-bottom: 8px;
+        }
+
+        .redes-sociais a {
+            margin: 0 8px;
+        }
+
+        /* =========================
+           RESPONSIVIDADE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            header {
+                flex-direction: column;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .filtros {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-conteudo {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         CABEÇALHO
+    ========================== -->
+
+    <header>
+
+        <h1>🐾 AdotaPet</h1>
+
+        <nav>
+
+            <a href="/">
+                Início
+            </a>
+
+            <a href="#animais">
+                Animais
+            </a>
+
+            <a href="#sobre">
+                Sobre
+            </a>
+
+            <a href="/admin.html">
+                Área administrativa
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         APRESENTAÇÃO
+    ========================== -->
+
+    <section class="hero">
+
+        <h2>
+            Encontre um novo amigo
+        </h2>
+
+        <p>
+            Conheça animais resgatados que
+            estão esperando por uma oportunidade
+            de encontrar um novo lar.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         CATÁLOGO
+    ========================== -->
+
+    <main class="container">
+
+        <h2>
+            Encontre seu novo amigo
+        </h2>
+
+
+        <!-- FILTROS -->
+
+        <div class="filtros">
+
+            <input
+                type="text"
+                id="pesquisa"
+                placeholder="Pesquisar por nome..."
+            >
+
+
+            <select id="especie">
+
+                <option value="">
+                    Todas as espécies
+                </option>
+
+                <option value="Cachorro">
+                    Cachorro
+                </option>
+
+                <option value="Gato">
+                    Gato
+                </option>
+
+            </select>
+
+
+            <select id="sexo">
+
+                <option value="">
+                    Todos os sexos
+                </option>
+
+                <option value="Macho">
+                    Macho
+                </option>
+
+                <option value="Fêmea">
+                    Fêmea
+                </option>
+
+            </select>
+
+
+            <select id="porte">
+
+                <option value="">
+                    Todos os portes
+                </option>
+
+                <option value="Pequeno">
+                    Pequeno
+                </option>
+
+                <option value="Médio">
+                    Médio
+                </option>
+
+                <option value="Grande">
+                    Grande
+                </option>
+
+            </select>
+
+
+            <button
+                onclick="filtrarAnimais()">
+
+                Pesquisar
+
+            </button>
+
+        </div>
+
+
+        <!-- LISTA DE ANIMAIS -->
+
+        <div id="animais">
+
+            <p>
+                Carregando animais...
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         RODAPÉ
+    ========================== -->
+
+    <footer>
+
+        <div class="footer-conteudo">
+
+            <div class="footer-coluna">
+                <h3>AdotaPet</h3>
+                <p>
+                    Plataforma para facilitar a divulgação de animais
+                    resgatados e o processo de adoção responsável.
+                </p>
+            </div>
+
+            <div class="footer-coluna">
+                <h3>Links</h3>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="#animais">Animais</a></li>
+                    <li><a href="#sobre">Sobre nós</a></li>
+                    <li><a href="/admin.html">Área administrativa</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-coluna">
+                <h3>Contato</h3>
+                <p>
+                    E-mail: contato@adotapet.com
+                </p>
+                <p>
+                    Projeto acadêmico - UCPEL
+                </p>
+            </div>
+
+        </div>
+
+        <div class="footer-direitos">
+
+            <p>
+                AdotaPet © 2026. Todos os direitos reservados.
+            </p>
+
+            <p class="redes-sociais">
+                Redes sociais:
+                <a href="#" aria-label="Instagram">Instagram</a>
+                <a href="#" aria-label="Facebook">Facebook</a>
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+
+        let todosAnimais = [];
+
+
+        /* =========================
+           CARREGAR ANIMAIS
+        ========================== */
+
+        async function carregarAnimais() {
+
+            const container =
+                document.getElementById(
+                    "animais"
+                );
+
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        "/api/animais"
+                    );
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Erro ao buscar animais."
+                    );
+
+                }
+
+
+                todosAnimais =
+                    await resposta.json();
+
+
+                mostrarAnimais(
+                    todosAnimais
+                );
+
+
+            } catch (erro) {
+
+                console.error(erro);
+
+
+                container.innerHTML = `
+                    <p>
+                        Não foi possível
+                        carregar os animais.
+                    </p>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================
+           MOSTRAR ANIMAIS
+        ========================== */
+
+        function mostrarAnimais(animais) {
+
+            const container =
+                document.getElementById(
+                    "animais"
+                );
+
+
+            container.innerHTML = "";
+
+
+            if (animais.length === 0) {
+
+                container.innerHTML = `
+                    <p>
+                        Nenhum animal encontrado.
+                    </p>
+                `;
+
+                return;
+
+            }
+
+
+            animais.forEach(animal => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className = "card";
+
+
+                card.innerHTML = `
+
+                    <div class="foto">
+                        🐾
+                    </div>
+
+
+                    <h3>
+                        ${animal.nome}
+                    </h3>
+
+
+                    <p>
+
+                        <strong>
+                            Espécie:
+                        </strong>
+
+                        ${animal.especie}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Sexo:
+                        </strong>
+
+                        ${animal.sexo}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Idade:
+                        </strong>
+
+                        ${animal.idade}
+                        ano(s)
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Porte:
+                        </strong>
+
+                        ${animal.porte}
+
+                    </p>
+
+
+                    <p>
+                        ${animal.descricao}
+                    </p>
+
+
+                    <p class="status">
+
+                        ${animal.status}
+
+                    </p>
+
+
+                    <button
+                        class="btn-detalhes"
+                        onclick="
+                            verDetalhes(
+                                ${animal.id_animal}
+                            )
+                        ">
+
+                        Ver detalhes
+
+                    </button>
+
+                `;
+
+
+                container.appendChild(
+                    card
+                );
+
+            });
+
+        }
+
+
+        /* =========================
+           FILTRAR ANIMAIS
+        ========================== */
+
+        function filtrarAnimais() {
+
+            const pesquisa =
+                document
+                    .getElementById(
+                        "pesquisa"
+                    )
+                    .value
+                    .toLowerCase();
+
+
+            const especie =
+                document.getElementById(
+                    "especie"
+                ).value;
+
+
+            const sexo =
+                document.getElementById(
+                    "sexo"
+                ).value;
+
+
+            const porte =
+                document.getElementById(
+                    "porte"
+                ).value;
+
+
+            const resultados =
+                todosAnimais.filter(
+                    animal => {
+
+
+                        const correspondePesquisa =
+                            animal.nome
+                                .toLowerCase()
+                                .includes(
+                                    pesquisa
+                                );
+
+
+                        const correspondeEspecie =
+                            especie === "" ||
+                            animal.especie ===
+                                especie;
+
+
+                        const correspondeSexo =
+                            sexo === "" ||
+                            animal.sexo ===
+                                sexo;
+
+
+                        const correspondePorte =
+                            porte === "" ||
+                            animal.porte ===
+                                porte;
+
+
+                        return (
+                            correspondePesquisa &&
+                            correspondeEspecie &&
+                            correspondeSexo &&
+                            correspondePorte
+                        );
+
+                    }
+                );
+
+
+            mostrarAnimais(
+                resultados
+            );
+
+        }
+
+
+        /* =========================
+           ABRIR DETALHES
+        ========================== */
+
+        function verDetalhes(id) {
+
+            window.location.href =
+                `/animal.html?id=${id}`;
+
+        }
+
+
+        /* =========================
+           INICIAR PÁGINA
+        ========================== */
+
+        carregarAnimais();
+
+    </script>
+
+
+</body>
+
+</html>

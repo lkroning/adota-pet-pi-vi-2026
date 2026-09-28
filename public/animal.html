@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Detalhes do Animal - AdotaPet</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7f2;
+            color: #333;
+        }
+
+        /* =========================
+           CABEÇALHO
+        ========================= */
+
+        header {
+            background-color: #2f6f4e;
+            color: white;
+            padding: 20px 8%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           CONTEÚDO
+        ========================= */
+
+        .container {
+            width: 84%;
+            max-width: 1000px;
+            margin: 50px auto;
+        }
+
+        .animal {
+            background-color: white;
+
+            border-radius: 15px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0, 0, 0, 0.08);
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 40px;
+        }
+
+        /* =========================
+           IMAGEM
+        ========================= */
+
+        .foto {
+            height: 350px;
+
+            background-color: #d8e4dc;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 100px;
+        }
+
+        /* =========================
+           INFORMAÇÕES
+        ========================= */
+
+        .informacoes h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .informacoes p {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .status {
+            color: #2f6f4e;
+            font-weight: bold;
+        }
+
+        /* =========================
+           BOTÃO DE INTERESSE
+        ========================= */
+
+        .btn-interesse {
+            margin-top: 20px;
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background-color: #2f6f4e;
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+        }
+
+        .btn-interesse:hover {
+            opacity: 0.9;
+        }
+
+        /* =========================
+           BOTÃO VOLTAR
+        ========================= */
+
+        .btn-voltar {
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+            color: #2f6f4e;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .btn-voltar:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           RODAPÉ
+        ========================= */
+
+        footer {
+            margin-top: 60px;
+
+            padding: 30px 8%;
+
+            background-color: #26382d;
+
+            color: white;
+
+            text-align: center;
+        }
+
+        /* =========================
+           RESPONSIVIDADE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .animal {
+                grid-template-columns: 1fr;
+            }
+
+            .foto {
+                height: 250px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         CABEÇALHO
+    ========================== -->
+
+    <header>
+
+        <h1>🐾 AdotaPet</h1>
+
+        <nav>
+
+            <a href="/">
+                Início
+            </a>
+
+            <a href="/#animais">
+                Animais
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         CONTEÚDO
+    ========================== -->
+
+    <main class="container">
+
+        <a
+            href="/"
+            class="btn-voltar">
+
+            ← Voltar para os animais
+
+        </a>
+
+
+        <div id="animal">
+
+            <p>
+                Carregando informações...
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         RODAPÉ
+    ========================== -->
+
+    <footer>
+
+        <p>
+            AdotaPet © 2026
+        </p>
+
+        <p>
+            Plataforma de adoção responsável
+            de animais resgatados.
+        </p>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+
+        /* =========================
+           CARREGAR ANIMAL
+        ========================= */
+
+        async function carregarAnimal() {
+
+            const parametros =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+
+            const id =
+                parametros.get("id");
+
+
+            const container =
+                document.getElementById(
+                    "animal"
+                );
+
+
+            /* -------------------------
+               VERIFICAR ID
+            ------------------------- */
+
+            if (!id) {
+
+                container.innerHTML = `
+                    <p>
+                        Animal não informado.
+                    </p>
+                `;
+
+                return;
+
+            }
+
+
+            try {
+
+                /* -------------------------
+                   CONSULTAR API
+                ------------------------- */
+
+                const resposta =
+                    await fetch(
+                        `/api/animais/${id}`
+                    );
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Animal não encontrado."
+                    );
+
+                }
+
+
+                const animal =
+                    await resposta.json();
+
+
+                /* -------------------------
+                   MONTAR PÁGINA
+                ------------------------- */
+
+                container.innerHTML = `
+
+                    <div class="animal">
+
+                        <div class="foto">
+
+                            🐾
+
+                        </div>
+
+
+                        <div class="informacoes">
+
+                            <h2>
+                                ${animal.nome}
+                            </h2>
+
+
+                            <p>
+
+                                <strong>
+                                    Espécie:
+                                </strong>
+
+                                ${animal.especie}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Sexo:
+                                </strong>
+
+                                ${animal.sexo}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Idade:
+                                </strong>
+
+                                ${animal.idade}
+                                ano(s)
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Porte:
+                                </strong>
+
+                                ${animal.porte}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Descrição:
+                                </strong>
+
+                                ${animal.descricao}
+
+                            </p>
+
+
+                            <p class="status">
+
+                                Status:
+                                ${animal.status}
+
+                            </p>
+
+
+                            ${
+                                animal.status ===
+                                "Disponível"
+
+                                ?
+
+                                `
+                                <button
+                                    class="btn-interesse"
+                                    onclick="
+                                        manifestarInteresse(
+                                            ${animal.id_animal}
+                                        )
+                                    ">
+
+                                    Tenho interesse
+                                    em adotar
+
+                                </button>
+                                `
+
+                                :
+
+                                `
+                                <p>
+                                    Este animal
+                                    não está disponível
+                                    para adoção no momento.
+                                </p>
+                                `
+                            }
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+            } catch (erro) {
+
+                console.error(erro);
+
+
+                container.innerHTML = `
+
+                    <div class="animal">
+
+                        <div>
+
+                            <h2>
+                                Não foi possível
+                                carregar o animal.
+                            </h2>
+
+                            <p>
+                                Verifique se o animal
+                                ainda está cadastrado.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================
+           MANIFESTAR INTERESSE
+        ========================= */
+
+        function manifestarInteresse(id) {
+
+            window.location.href =
+                `/interesse.html?animal=${id}`;
+
+        }
+
+
+        /* =========================
+           INICIAR
+        ========================= */
+
+        carregarAnimal();
+
+    </script>
+
+
+</body>
+
+</html>
